@@ -36,9 +36,6 @@ def get_mail_content(url):
 def transform_mail_page(data):
     return data
 
-def serve(xxx):
-    pass
-
 if __name__ == '__main__':
   print "Running proxy at: ", PORT
   httpd.serve_forever()
