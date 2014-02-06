@@ -1,25 +1,22 @@
 import urllib2
 import SimpleHTTPServer
 import SocketServer
-import re
 import sys
 import urllib
 
 PORT = int(sys.argv[1])
 
-MAIL_RE = re.compile("http://.*\.dailymail\.co\.uk/")
 
 class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     
     def do_GET(self):
         print "GOT: %s" % (self.path, )
-        path = self.path
-        if MAIL_RE.match(path):
-            print self.rfile.read()
-            self.rfile.write(get_mail_address(path))
+        if self.path == "http://www.dailymail.co.uk/":
+            result= get_mail_address(self.path)
+            self.wfile.write(result)
         else:
             self.copyfile(urllib.urlopen(self.path), self.wfile)
-            self.wfile.flush()
+        self.wfile.flush()
 httpd = SocketServer.TCPServer(("", PORT), Handler)
 
 def get_mail_address(url):
