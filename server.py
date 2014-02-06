@@ -1,4 +1,5 @@
 import urllib2
+from bs4 import BeautifulSoup
 
 def get_mail_address(url):
     """
@@ -15,7 +16,12 @@ def get_mail_content(url):
     return urllib2.urlopen(url).read()
 
 def transform_mail_page(data):
-    return data
+    soup = BeautifulSoup(data)
+    for img in soup.find_all('img'):
+        print img['src'],img.get('width'),img.get('height')
+        new_src = 'http://placekitten.com/g/{}/{}'.format(img.get('width'),img.get('height'))
+        img['src'] = new_src
+    return soup.prettify().encode('utf8')
 
 def serve(xxx):
     pass
